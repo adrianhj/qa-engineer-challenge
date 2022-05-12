@@ -1,4 +1,4 @@
-import { Table, Tbody, Td, Th, Tr } from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Td, Th, Tr } from "@chakra-ui/react";
 import { formatAmount } from "src/util/format-amount";
 
 type LoanRepaymentDetailsProps = {
@@ -13,22 +13,24 @@ const LoanRepaymentDetails = ({
   totalAmountRepayable,
 }: LoanRepaymentDetailsProps) => {
   return (
-    <Table>
-      <Tbody>
-        <Tr>
-          <Th scope="row">Monthly Repayment Amount</Th>
-          <Td isNumeric>{formatAmount(monthlyRepaymentAmount)}</Td>
-        </Tr>
-        <Tr>
-          <Th scope="row">Total Interest Repayable</Th>
-          <Td isNumeric>{formatAmount(totalInterestRepayable)}</Td>
-        </Tr>
-        <Tr>
-          <Th scope="row">Total Amount Repayable</Th>
-          <Td isNumeric>{totalAmountRepayable?.toFixed(2)}</Td>
-        </Tr>
-      </Tbody>
-    </Table>
+    <TableContainer>
+      <Table>
+        <Tbody>
+          <Tr>
+            <Th scope="row">Monthly Repayment Amount</Th>
+            <Td isNumeric>{formatAmount(monthlyRepaymentAmount)}</Td>
+          </Tr>
+          <Tr>
+            <Th scope="row">Total Interest Repayable</Th>
+            <Td isNumeric>{formatAmount(totalInterestRepayable)}</Td>
+          </Tr>
+          <Tr>
+            <Th scope="row">Total Amount Repayable</Th>
+            <Td isNumeric>{totalAmountRepayable?.toFixed(2)}</Td>
+          </Tr>
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 };
 

@@ -1,4 +1,4 @@
-import { ChakraProvider, Container, extendTheme, Flex } from "@chakra-ui/react";
+import { ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
 import { LoanCalculator } from "./components/LoanCalculator";
 
 const theme = extendTheme({
@@ -14,11 +14,9 @@ const theme = extendTheme({
 const App = () => {
   return (
     <ChakraProvider theme={theme}>
-      <Flex>
-        <Container marginY={6}>
-          <LoanCalculator />
-        </Container>
-      </Flex>
+      <Container marginY={6} maxW="3xl">
+        <LoanCalculator />
+      </Container>
     </ChakraProvider>
   );
 };
