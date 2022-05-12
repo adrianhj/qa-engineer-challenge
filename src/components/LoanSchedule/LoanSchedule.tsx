@@ -23,7 +23,7 @@ type LoanInstalmentProps = {
 const LoanSchedule = ({ instalments }: LoanInstalmentProps) => {
   return (
     <TableContainer>
-      <Table>
+      <Table aria-label="Loan Schedule">
         <Thead>
           <Tr>
             <Th>Instalment</Th>

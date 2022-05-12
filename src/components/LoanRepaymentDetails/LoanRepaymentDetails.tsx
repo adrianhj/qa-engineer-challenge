@@ -14,7 +14,7 @@ const LoanRepaymentDetails = ({
 }: LoanRepaymentDetailsProps) => {
   return (
     <TableContainer>
-      <Table>
+      <Table aria-label="Loan Repayment Details">
         <Tbody>
           <Tr>
             <Th scope="row">Monthly Repayment Amount</Th>
