@@ -19,9 +19,9 @@ type LoanCalculatorFormValues = {
 };
 
 const defaultValues = {
-  loanAmount: 25000,
+  loanAmount: 30000,
   loanTerm: 12,
-  interestRate: 5,
+  interestRate: 7.5,
 };
 
 type LoanCalculatorFormProps = {
@@ -34,11 +34,21 @@ const LoanCalculatorForm = ({ onSubmit, onReset }: LoanCalculatorFormProps) => {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isSubmitted },
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<LoanCalculatorFormValues>({
     defaultValues,
     mode: "onBlur",
   });
+
+  const handleSubmitWithDelay = async (formData: LoanCalculatorFormValues) => {
+    onSubmit(
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve(formData);
+        }, Math.floor(Math.random() * (2500 - 500 + 1)) + 500)
+      )
+    );
+  };
 
   const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -47,7 +57,7 @@ const LoanCalculatorForm = ({ onSubmit, onReset }: LoanCalculatorFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleSubmitWithDelay)}>
       <Grid gap={3}>
         <GridItem>
           <FormControl
@@ -129,7 +139,12 @@ const LoanCalculatorForm = ({ onSubmit, onReset }: LoanCalculatorFormProps) => {
                 Reset
               </Button>
             ) : (
-              <Button colorScheme="teal" type="submit">
+              <Button
+                colorScheme="teal"
+                type="submit"
+                isLoading={isSubmitting}
+                loadingText="Calculating"
+              >
                 Calculate
               </Button>
             )}

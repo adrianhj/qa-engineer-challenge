@@ -14,8 +14,8 @@ const theme = extendTheme({
 const App = () => {
   return (
     <ChakraProvider theme={theme}>
-      <Flex height="100vh">
-        <Container marginTop={6}>
+      <Flex>
+        <Container marginY={6}>
           <LoanCalculator />
         </Container>
       </Flex>
