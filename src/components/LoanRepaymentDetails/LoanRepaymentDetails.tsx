@@ -1,12 +1,5 @@
 import { Table, Tbody, Td, Th, Tr } from "@chakra-ui/react";
-
-const amountFormatter = Intl.NumberFormat("en", {
-  style: "currency",
-  currency: "GBP",
-});
-
-const formatAmount = (amount: number | undefined) =>
-  typeof amount !== "undefined" ? amountFormatter.format(amount) : "-";
+import { formatAmount } from "src/util/format-amount";
 
 type LoanRepaymentDetailsProps = {
   monthlyRepaymentAmount?: number;
@@ -32,7 +25,7 @@ const LoanRepaymentDetails = ({
         </Tr>
         <Tr>
           <Th scope="row">Total Amount Repayable</Th>
-          <Td isNumeric>{formatAmount(totalAmountRepayable)}</Td>
+          <Td isNumeric>{totalAmountRepayable?.toFixed(2)}</Td>
         </Tr>
       </Tbody>
     </Table>

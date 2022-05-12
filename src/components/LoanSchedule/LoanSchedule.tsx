@@ -1,12 +1,5 @@
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-
-const amountFormatter = Intl.NumberFormat("en", {
-  style: "currency",
-  currency: "GBP",
-});
-
-const formatAmount = (amount: number | undefined) =>
-  typeof amount !== "undefined" ? amountFormatter.format(amount) : "-";
+import { formatAmount } from "src/util/format-amount";
 
 type Instalment = {
   payment: number;

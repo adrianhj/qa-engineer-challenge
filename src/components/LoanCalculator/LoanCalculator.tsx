@@ -1,9 +1,11 @@
 import { Grid, GridItem } from "@chakra-ui/react";
-import { useAmortisation } from "../../hooks/use-amortisation";
-import { LoanCalculatorForm } from "../LoanCalculatorForm";
-import { LoanCalculatorFormValues } from "../LoanCalculatorForm/LoanCalculatorForm";
-import { LoanRepaymentDetails } from "../LoanRepaymentDetails";
-import { LoanSchedule } from "../LoanSchedule";
+import {
+  LoanCalculatorForm,
+  LoanCalculatorFormValues,
+} from "src/components/LoanCalculatorForm";
+import { LoanRepaymentDetails } from "src/components/LoanRepaymentDetails";
+import { LoanSchedule } from "src/components/LoanSchedule";
+import { useAmortisation } from "src/hooks/use-amortisation";
 
 const LoanCalculator = () => {
   const { schedule, reset, amortise } = useAmortisation();
