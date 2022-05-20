@@ -1,46 +1,113 @@
-# Getting Started with Create React App
+# QA Engineer Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
+TIMEBOX: 3-4 hours
+STACK: TypeScript/WebdriverIO (or an alternative browser automation test framework)
+```
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This challenge is to reverse engineer a set of acceptance criteria, and implement
+browser automation coverage, for the provided React application.
 
-### `npm start`
+It is important to note that this is by no means a test with a single correct
+answer in terms of structure and code, we appreciate we are going back to front with
+regards to requirements, but we are hoping to get an understanding of how you communicate
+expectations around behaviour in software, as well as how you go about validating these
+behaviours using automation.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+We have bootstrapped a small end-to-end set-up using [WebdriverIO](https://webdriver.io/)
+in the `e2e` directory, with a small smoke test to ensure the set-up works.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## The Challenge
 
-### `npm test`
+Using the provided application (documented in more detail below):
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Reverse engineer the behaviours of the provided application into acceptance
+  criteria as you see fit
+- Provide coverage validating these behaviours using browser automation
+- Document any potential issues found in the application as you see fit
 
-### `npm run build`
+## The Loan Amortiser Application
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The Loan Amortiser provides a basic calculator to calculate the instalment
+schedule of a loan given an amount, a term (in months), and an annual interest rate.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Using these inputs, the calculator derives the following:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- The monthly repayment amount using the logic outlined below
+- The total interest repayable based on the difference between the loan amount and
+  the total amount due
+- The total amount repayable as the loan amount plus the interest repayable
 
-### `npm run eject`
+As well as the full schedule, detailing each repayment over the term of the loan.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Our calculator generates the amortisation schedule using the
+[Annuity Method](https://en.wikipedia.org/wiki/Amortization_schedule#Annuity_method).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The monthly repayment amount is calculated as per:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![Annuity Method for calculating an Amortisation Schedule](./annuity_method.svg)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Where:
 
-## Learn More
+- `A` is the monthly repayment amount
+- `P` is the loan amount
+- `i` is the periodic interest rate
+- `n` total number of payments
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Our calculator assumes 12 periods per year (i.e. monthly) for the purpose of deriving
+the periodic interest rate, and payments being made monthly for the purpose of deriving
+the total number of payments (i.e. a term of 12 is 12 payments).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To calculate the schedule we then apply the following for each payment due in order,
+using the balance of the previous payment (or the loan amount for the first payment)
+as input to the next: `Balance Outstanding = (B * (1 + i)) - A`.
+
+Where:
+
+- `B` is the current outstanding balance of the loan
+- `i` is the periodic interest rate as defined above
+- `A` is the monthly repayment amount as calculated above
+
+To derive the proportion of each payment being applied to interest and to principal,
+we calculate the interest as `B * i`, and the principal as `A - (B * i)` using the
+same defintion for the terms as above.
+
+This main set of logic is implemented in the
+[useAmortisation](./src/hooks/use-amortisation/useAmortisation.ts) hook.
+
+### Pre-requisites to Run the Application
+
+- Node 16; or alternatively Docker using the provided Dockerfile
+
+### Running the Application
+
+1. Ensure the project's dependencies are installed using `npm install`
+2. Launch the application using `npm run start`
+
+Once started you will be able to access the application at
+[http://localhost:3000](http://localhost:3000).
+
+## Running the WebdriverIO Suite
+
+### Pre-requisites
+
+- Node 16
+- Google Chrome (you are able to configure a different browser in the
+  `./e2e/wdio.conf.ts` file if you prefer)
+- Application running on http://localhost:3000 using steps above
+
+### Running the Suite
+
+1. Ensure the project's dependencies are installed using `npm install`
+2. Run the suite using `npm run e2e`
+
+## Submitting the Challenge
+
+- Please submit your challenge as a git repository, including any run instructions if different to commands above.
+- You can either:
+  - Create a repository on your favourite git hosting provider (GitHub, GitLab, BitBucket) and share the link; or
+  - Send the whole repository, zipped (including the .git directory!)
+- Please do not fork this repository directly.
+- Feel free to include any supporting materials used to validate the application
