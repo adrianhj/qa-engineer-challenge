@@ -1,0 +1,1 @@
+export { LoanRepaymentSchedule } from "./LoanRepaymentSchedule";

@@ -1,11 +1,26 @@
-import { Table, TableContainer, Tbody, Td, Th, Tr } from "@chakra-ui/react";
-import { formatAmount } from "src/util/format-amount";
+import {
+  Table,
+  TableCaption,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Tr,
+} from "@chakra-ui/react";
 
 type LoanRepaymentDetailsProps = {
   monthlyRepaymentAmount?: number;
   totalInterestRepayable?: number;
   totalAmountRepayable?: number;
 };
+
+const amountFormatter = Intl.NumberFormat("en", {
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
+});
+
+const formatAmount = (amount: number | undefined) =>
+  typeof amount !== "undefined" ? amountFormatter.format(amount) : "-";
 
 const LoanRepaymentDetails = ({
   monthlyRepaymentAmount,
@@ -14,8 +29,9 @@ const LoanRepaymentDetails = ({
 }: LoanRepaymentDetailsProps) => {
   return (
     <TableContainer>
-      <Table aria-label="Loan Repayment Details">
-        <Tbody>
+      <Table>
+        <TableCaption placement="top">Loan Repayment Details</TableCaption>
+        <Tbody sx={{ "tr:last-child > *": { borderBottom: 0 } }}>
           <Tr>
             <Th scope="row">Monthly Repayment Amount</Th>
             <Td isNumeric>{formatAmount(monthlyRepaymentAmount)}</Td>
@@ -26,7 +42,7 @@ const LoanRepaymentDetails = ({
           </Tr>
           <Tr>
             <Th scope="row">Total Amount Repayable</Th>
-            <Td isNumeric>{totalAmountRepayable?.toFixed(2)}</Td>
+            <Td isNumeric>{formatAmount(totalAmountRepayable)}</Td>
           </Tr>
         </Tbody>
       </Table>

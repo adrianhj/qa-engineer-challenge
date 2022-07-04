@@ -4,14 +4,19 @@ import {
   LoanCalculatorFormValues,
 } from "src/components/LoanCalculatorForm";
 import { LoanRepaymentDetails } from "src/components/LoanRepaymentDetails";
-import { LoanSchedule } from "src/components/LoanSchedule";
+import { LoanRepaymentSchedule } from "src/components/LoanRepaymentSchedule";
 import { useAmortisation } from "src/hooks/use-amortisation";
 
 const LoanCalculator = () => {
   const { schedule, reset, amortise } = useAmortisation();
 
   const handleSubmit = (formData: LoanCalculatorFormValues) => {
-    amortise(formData.loanAmount, formData.loanTerm, formData.interestRate);
+    amortise(
+      formData.loanAmount,
+      formData.loanTerm,
+      formData.balloonAmount,
+      formData.interestRate
+    );
   };
 
   return (
@@ -47,7 +52,7 @@ const LoanCalculator = () => {
           bg="white"
           borderBottom={1}
         >
-          <LoanSchedule instalments={schedule.instalments} />
+          <LoanRepaymentSchedule instalments={schedule.instalments} />
         </GridItem>
       )}
     </Grid>

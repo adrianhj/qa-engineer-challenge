@@ -6,8 +6,7 @@ import {
   FormLabel,
   Grid,
   GridItem,
-  NumberInput,
-  NumberInputField,
+  Input,
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -16,12 +15,14 @@ type LoanCalculatorFormValues = {
   loanAmount: number;
   loanTerm: number;
   interestRate: number;
+  balloonAmount: number;
 };
 
 const defaultValues = {
   loanAmount: 30000,
   loanTerm: 12,
   interestRate: 7.5,
+  balloonAmount: 0,
 };
 
 type LoanCalculatorFormProps = {
@@ -34,10 +35,9 @@ const LoanCalculatorForm = ({ onSubmit, onReset }: LoanCalculatorFormProps) => {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<LoanCalculatorFormValues>({
     defaultValues,
-    mode: "onBlur",
   });
 
   const handleSubmitWithDelay = async (formData: LoanCalculatorFormValues) => {
@@ -57,84 +57,117 @@ const LoanCalculatorForm = ({ onSubmit, onReset }: LoanCalculatorFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSubmitWithDelay)}>
+    <form onSubmit={handleSubmit(handleSubmitWithDelay)} noValidate>
       <Grid gap={3}>
         <GridItem>
           <FormControl
             isInvalid={Boolean(errors.loanAmount)}
-            isDisabled={isSubmitted}
+            isDisabled={isSubmitSuccessful}
           >
             <FormLabel htmlFor="loanAmount">Loan Amount</FormLabel>
-            <NumberInput id="loanAmount">
-              <NumberInputField
-                {...register("loanAmount", {
-                  valueAsNumber: true,
-                  required: {
-                    value: true,
-                    message: "The amount of the loan must be provided",
-                  },
-                  min: {
-                    value: 1,
-                    message: "The amount of the loan must be greater than 0",
-                  },
-                })}
-              />
-            </NumberInput>
+            <Input
+              id="loanAmount"
+              type="number"
+              {...register("loanAmount", {
+                valueAsNumber: true,
+                required: {
+                  value: true,
+                  message: "The amount of the loan must be provided",
+                },
+                min: {
+                  value: 1,
+                  message: "The amount of the loan must be greater than 0",
+                },
+                validate: (amount) =>
+                  /^\d+$/.test(String(amount)) ||
+                  "The amount of the loan must be a whole number",
+              })}
+            />
             <FormErrorMessage>{errors.loanAmount?.message}</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
           <FormControl
             isInvalid={Boolean(errors.loanTerm)}
-            isDisabled={isSubmitted}
+            isDisabled={isSubmitSuccessful}
           >
             <FormLabel htmlFor="loanTerm">Loan Term</FormLabel>
-            <NumberInput id="loanTerm">
-              <NumberInputField
-                {...register("loanTerm", {
-                  valueAsNumber: true,
-                  required: {
-                    value: true,
-                    message: "The term of the loan must be provided",
-                  },
-                  min: {
-                    value: 1,
-                    message: "The term of the loan must be greater than 0",
-                  },
-                })}
-              />
-            </NumberInput>
+            <Input
+              id="loanTerm"
+              type="number"
+              {...register("loanTerm", {
+                valueAsNumber: true,
+                required: {
+                  value: true,
+                  message: "The term of the loan must be provided",
+                },
+                min: {
+                  value: 1,
+                  message: "The term of the loan must be greater than 0",
+                },
+                validate: (term) =>
+                  /^\d+$/.test(String(term)) ||
+                  "The term of the loan must be a whole number",
+              })}
+            />
             <FormErrorMessage>{errors.loanTerm?.message}</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
           <FormControl
             isInvalid={Boolean(errors.interestRate)}
-            isDisabled={isSubmitted}
+            isDisabled={isSubmitSuccessful}
           >
             <FormLabel htmlFor="interestRate">Interest Rate</FormLabel>
-            <NumberInput id="interestRate">
-              <NumberInputField
-                {...register("interestRate", {
-                  valueAsNumber: true,
-                  required: {
-                    value: true,
-                    message: "The interest rate of the loan must be provided",
-                  },
-                  min: {
-                    value: 0,
-                    message:
-                      "The interest rate of the loan must be greater than 0",
-                  },
-                })}
-              />
-            </NumberInput>
+            <Input
+              id="interestRate"
+              type="number"
+              {...register("interestRate", {
+                valueAsNumber: true,
+                required: {
+                  value: true,
+                  message: "The interest rate of the loan must be provided",
+                },
+                min: {
+                  value: 0,
+                  message:
+                    "The interest rate of the loan must be greater than 0",
+                },
+              })}
+            />
             <FormErrorMessage>{errors.interestRate?.message}</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
+          <FormControl
+            isInvalid={Boolean(errors.balloonAmount)}
+            isDisabled={isSubmitSuccessful}
+          >
+            <FormLabel htmlFor="balloonAmount">Balloon Amount</FormLabel>
+            <Input
+              id="balloonAmount"
+              type="number"
+              {...register("balloonAmount", {
+                valueAsNumber: true,
+                required: {
+                  value: true,
+                  message: "The balloon amount must be provided",
+                },
+                min: {
+                  value: 0,
+                  message: "The balloon amount must be a positive amount",
+                },
+                validate: (term) =>
+                  /^\d+$/.test(String(term)) ||
+                  "The balloon amount must be a whole number",
+              })}
+            />
+            <FormErrorMessage>{errors.balloonAmount?.message}</FormErrorMessage>
+          </FormControl>
+        </GridItem>
+        <GridItem>
           <Box display="flex" justifyContent="center">
-            {isSubmitted ? (
+            {isSubmitSuccessful ? (
               <Button colorScheme="gray" onClick={handleReset}>
                 Reset
               </Button>

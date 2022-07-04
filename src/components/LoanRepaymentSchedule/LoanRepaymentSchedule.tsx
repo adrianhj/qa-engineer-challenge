@@ -1,5 +1,6 @@
 import {
   Table,
+  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -16,14 +17,15 @@ type Instalment = {
   balance: number;
 };
 
-type LoanInstalmentProps = {
+type LoanRepaymentScheduleProps = {
   instalments: Instalment[];
 };
 
-const LoanSchedule = ({ instalments }: LoanInstalmentProps) => {
+const LoanRepaymentSchedule = ({ instalments }: LoanRepaymentScheduleProps) => {
   return (
     <TableContainer>
-      <Table aria-label="Loan Schedule">
+      <Table>
+        <TableCaption placement="top">Loan Repayment Schedule</TableCaption>
         <Thead>
           <Tr>
             <Th>Instalment</Th>
@@ -33,7 +35,7 @@ const LoanSchedule = ({ instalments }: LoanInstalmentProps) => {
             <Th isNumeric>Balance</Th>
           </Tr>
         </Thead>
-        <Tbody>
+        <Tbody sx={{ "tr:last-child > *": { borderBottom: 0 } }}>
           {instalments.map((instalment, index) => (
             <Tr key={index + 1}>
               <Td>{index + 1}</Td>
@@ -49,4 +51,4 @@ const LoanSchedule = ({ instalments }: LoanInstalmentProps) => {
   );
 };
 
-export { LoanSchedule };
+export { LoanRepaymentSchedule };
